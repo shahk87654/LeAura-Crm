@@ -1,0 +1,18 @@
+import mongoose from 'mongoose'
+
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    password: { type: String, required: true, select: false },
+    role: { type: String, enum: ['admin', 'manager'], default: 'manager' },
+    phone: { type: String, trim: true },
+    isActive: { type: Boolean, default: true }
+  },
+  { timestamps: true, strict: true }
+)
+
+userSchema.set('toJSON', { virtuals: true })
+userSchema.set('toObject', { virtuals: true })
+
+export default mongoose.models.User || mongoose.model('User', userSchema)
