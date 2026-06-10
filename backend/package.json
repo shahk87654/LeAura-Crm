@@ -8,7 +8,8 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "seed:admin": "node --loader ts-node/esm src/seeds/admin.seed.ts",
-    "seed:data": "node --loader ts-node/esm src/seeds/data.seed.ts"
+    "seed:data": "node --loader ts-node/esm src/seeds/data.seed.ts",
+    "seed:clean": "node --loader ts-node/esm src/seeds/clean.seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

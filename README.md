@@ -113,8 +113,21 @@ VITE_API_BASE_URL=http://localhost:5000/api
    cd backend && npm run build
    cd ../frontend && npm run build
    ```
-2. Serve the backend from `backend/dist/server.js`.
-3. Host the frontend `frontend/dist` assets on any static hosting.
+2. Start the backend production server:
+   ```bash
+   cd backend
+   npm run start
+   ```
+3. Host the frontend `frontend/dist` static assets on any static hosting or preview locally with:
+   ```bash
+   cd frontend
+   npm run preview
+   ```
+4. Optionally clean sample data before production use:
+   ```bash
+   cd backend
+   npm run seed:clean
+   ```
 
 ## Notes
 
