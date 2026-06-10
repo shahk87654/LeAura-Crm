@@ -110,24 +110,43 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 1. Build both apps:
    ```bash
-   cd backend && npm run build
-   cd ../frontend && npm run build
+   npm install
+   npm run build
    ```
 2. Start the backend production server:
    ```bash
-   cd backend
    npm run start
    ```
-3. Host the frontend `frontend/dist` static assets on any static hosting or preview locally with:
-   ```bash
-   cd frontend
-   npm run preview
-   ```
-4. Optionally clean sample data before production use:
+3. Optionally clean sample data before production use:
    ```bash
    cd backend
    npm run seed:clean
    ```
+
+## Railway Deployment
+
+This repo is now Railway-ready with a root `package.json` and `Procfile`.
+
+1. Configure Railway environment variables:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+   - `JWT_EXPIRES_IN`
+   - `PORT`
+   - `NODE_ENV=production`
+   - `FRONTEND_URL` (set to your deployed frontend URL or the Railway service URL)
+   - `VITE_API_BASE_URL` (set to your Railway backend URL, e.g. `https://<railway-backend-url>/api`)
+
+2. Set Railway start command to:
+   ```bash
+   npm run start
+   ```
+
+3. Build both apps before deployment using:
+   ```bash
+   npm run build
+   ```
+
+4. The backend will serve the built frontend assets from `frontend/dist` in production.
 
 ## Notes
 

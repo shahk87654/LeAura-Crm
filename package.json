@@ -1,0 +1,19 @@
+{
+  "name": "le-aura-crm",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd backend && npm run start",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "seed:admin": "cd backend && npm run seed:admin",
+    "seed:data": "cd backend && npm run seed:data",
+    "seed:clean": "cd backend && npm run seed:clean"
+  }
+}

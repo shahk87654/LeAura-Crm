@@ -2,6 +2,8 @@ import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import rateLimit from 'express-rate-limit'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import authRoutes from './routes/auth.routes.js'
 import usersRoutes from './routes/users.routes.js'
 import leadsRoutes from './routes/leads.routes.js'
@@ -15,6 +17,9 @@ import { env } from './config/env.js'
 import { errorHandler } from './middleware/errorHandler.js'
 
 const app = express()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const frontendDistPath = path.join(__dirname, '../frontend/dist')
 
 app.use(helmet())
 app.use(express.json())
@@ -44,10 +49,21 @@ app.use('/api/packages', packagesRoutes)
 app.use('/api/calendar', calendarRoutes)
 app.use('/api/reports', reportsRoutes)
 
-app.use(errorHandler)
+if (env.nodeEnv === 'production') {
+  app.use(express.static(frontendDistPath))
+
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api')) {
+      return res.status(404).json({ success: false, error: 'Not found' })
+    }
+    return res.sendFile(path.join(frontendDistPath, 'index.html'))
+  })
+}
 
 app.get('/api/health', (_req, res) => {
   return res.json({ success: true, data: { status: 'ok' } })
 })
+
+app.use(errorHandler)
 
 export default app
