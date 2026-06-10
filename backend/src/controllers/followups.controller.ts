@@ -2,6 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express'
 import { z } from 'zod'
 import FollowUp from '../models/FollowUp.model.js'
 import Lead from '../models/Lead.model.js'
+import Booking from '../models/Booking.model.js'
 import { AuthedRequest } from '../middleware/authenticate.js'
 
 const querySchema = z.object({
@@ -126,3 +127,21 @@ export async function getOverdueFollowUps(_req: Request, res: Response, next: Ne
     next(error)
   }
 }
+
+export async function getFollowUpHistory(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { leadId } = req.params
+    const lead = await Lead.findById(leadId).populate('assignedTo', 'name email')
+    if (!lead) {
+      return res.status(404).json({ success: false, error: 'Lead not found' })
+    }
+    const followUps = await FollowUp.find({ lead: leadId })
+      .populate('manager', 'name email')
+      .sort({ createdAt: -1 })
+    const booking = await Booking.findOne({ lead: leadId })
+    res.json({ success: true, data: { lead, followUps, booking: booking ?? null } })
+  } catch (error) {
+    next(error)
+  }
+}
+

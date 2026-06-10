@@ -1,9 +1,8 @@
 import mongoose from 'mongoose'
-import { generateBookingRef } from '../utils/generateRef.js'
 
 const bookingSchema = new mongoose.Schema(
   {
-    bookingRef: { type: String, unique: true, default: () => generateBookingRef() },
+    bookingRef: { type: String, unique: true, sparse: true },
     lead: { type: mongoose.Schema.Types.ObjectId, ref: 'Lead' },
     clientName: { type: String, required: true, trim: true },
     phone: { type: String, required: true, trim: true },

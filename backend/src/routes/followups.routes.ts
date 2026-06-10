@@ -8,7 +8,8 @@ import {
   getFollowUps,
   getOverdueFollowUps,
   getTodayFollowUps,
-  updateFollowUp
+  updateFollowUp,
+  getFollowUpHistory
 } from '../controllers/followups.controller.js'
 
 const router = Router()
@@ -49,10 +50,11 @@ const querySchema = z.object({
 })
 
 router.use(authenticate)
+router.get('/today', getTodayFollowUps)
+router.get('/overdue', getOverdueFollowUps)
+router.get('/history/:leadId', getFollowUpHistory)
 router.get('/', validate(querySchema), getFollowUps)
 router.post('/', validate(createSchema), createFollowUp)
 router.put('/:id', validate(updateSchema), updateFollowUp)
-router.get('/today', getTodayFollowUps)
-router.get('/overdue', getOverdueFollowUps)
 
 export default router

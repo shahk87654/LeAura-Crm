@@ -43,3 +43,8 @@ export async function updateFollowUp(id: string, payload: Partial<FollowUp>) {
   const response = await api.put<{ success: boolean; data: FollowUp }>(`/followups/${id}`, payload)
   return response.data.data
 }
+
+export async function getFollowUpHistory(leadId: string) {
+  const response = await api.get<{ success: boolean; data: { lead: any; followUps: FollowUp[]; booking: any } }>(`/followups/history/${leadId}`)
+  return response.data.data
+}

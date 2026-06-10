@@ -115,7 +115,14 @@ export async function patchLeadStage(req: Request, res: Response, next: NextFunc
     if (user?.role !== 'admin' && lead.assignedTo?.toString() !== user?.id) {
       return res.status(403).json({ success: false, error: 'Access denied' })
     }
-    lead.stage = req.body.stage
+    const { stage, lostReason } = req.body as { stage: string; lostReason?: string }
+    lead.stage = stage
+    if (stage === 'lost') {
+      if (lostReason) lead.lostReason = lostReason
+    } else {
+      // clear lostReason when moving out of lost
+      lead.lostReason = undefined
+    }
     await lead.save()
     res.json({ success: true, data: lead })
   } catch (error) {

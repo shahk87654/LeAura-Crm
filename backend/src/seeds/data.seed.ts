@@ -7,6 +7,13 @@ import Payment from '../models/Payment.model.js'
 import User from '../models/User.model.js'
 import { env } from '../config/env.js'
 
+function generateBookingRef() {
+  const prefix = 'BK'
+  const timestamp = Date.now().toString().slice(-6)
+  const random = Math.random().toString(36).substring(2, 5).toUpperCase()
+  return `${prefix}${timestamp}${random}`
+}
+
 async function seedData() {
   await mongoose.connect(env.mongodbUri)
 
@@ -173,6 +180,7 @@ async function seedData() {
   // Create bookings from some leads
   const bookings = await Booking.insertMany([
     {
+      bookingRef: generateBookingRef(),
       lead: leads[0].id,
       clientName: 'Ahmed Khan',
       phone: '03001234567',
@@ -193,6 +201,7 @@ async function seedData() {
       assignedManager: admin.id
     },
     {
+      bookingRef: generateBookingRef(),
       lead: leads[2].id,
       clientName: 'Hassan Malik',
       phone: '03005555555',
@@ -240,31 +249,41 @@ async function seedData() {
 
   console.log(`Created ${payments.length} payments`)
 
-  // Create follow-ups
+  // Create follow-ups with varied dates and statuses
   const followups = await FollowUp.insertMany([
+    // OVERDUE (Before today - June 10)
     {
       lead: leads[0].id,
       manager: admin.id,
       type: 'call',
-      scheduledAt: new Date('2026-06-15'),
+      scheduledAt: new Date('2026-06-05'),
       status: 'pending',
-      notes: 'Follow up on wedding preferences'
+      notes: 'Check availability for December wedding'
     },
     {
       lead: leads[1].id,
       manager: admin.id,
       type: 'site_visit',
-      scheduledAt: new Date('2026-06-12'),
+      scheduledAt: new Date('2026-06-08'),
       status: 'pending',
-      notes: 'Family visit to venue'
+      notes: 'Family visit to venue - URGENT'
     },
+    {
+      lead: leads[4].id,
+      manager: admin.id,
+      type: 'call',
+      scheduledAt: new Date('2026-06-07'),
+      status: 'pending',
+      notes: 'Confirm corporate event final details'
+    },
+    // TODAY (June 10)
     {
       lead: leads[2].id,
       manager: admin.id,
       type: 'call',
       scheduledAt: new Date('2026-06-10'),
       status: 'completed',
-      completedAt: new Date('2026-06-10'),
+      completedAt: new Date('2026-06-10 14:00'),
       outcome: 'booked',
       notes: 'Booking confirmed over phone call'
     },
@@ -272,9 +291,66 @@ async function seedData() {
       lead: leads[3].id,
       manager: admin.id,
       type: 'email',
-      scheduledAt: new Date('2026-06-11'),
+      scheduledAt: new Date('2026-06-10'),
       status: 'pending',
-      notes: 'Send engagement package details'
+      notes: 'Send engagement package details and quote'
+    },
+    {
+      lead: leads[0].id,
+      manager: admin.id,
+      type: 'whatsapp',
+      scheduledAt: new Date('2026-06-10'),
+      status: 'pending',
+      notes: 'Share payment plan options'
+    },
+    // UPCOMING (After today)
+    {
+      lead: leads[0].id,
+      manager: admin.id,
+      type: 'site_visit',
+      scheduledAt: new Date('2026-06-12'),
+      status: 'pending',
+      notes: 'Couple visiting venue for decoration review'
+    },
+    {
+      lead: leads[1].id,
+      manager: admin.id,
+      type: 'call',
+      scheduledAt: new Date('2026-06-13'),
+      status: 'pending',
+      notes: 'Confirm guest count and final headcount'
+    },
+    {
+      lead: leads[3].id,
+      manager: admin.id,
+      type: 'site_visit',
+      scheduledAt: new Date('2026-06-15'),
+      status: 'pending',
+      notes: 'Venue tour and package selection'
+    },
+    {
+      lead: leads[4].id,
+      manager: admin.id,
+      type: 'in_person',
+      scheduledAt: new Date('2026-06-14'),
+      status: 'pending',
+      notes: 'Corporate event planning meeting at office'
+    },
+    {
+      lead: leads[1].id,
+      manager: admin.id,
+      type: 'email',
+      scheduledAt: new Date('2026-06-16'),
+      status: 'pending',
+      notes: 'Send finalized proposal with itemized breakdown'
+    },
+    {
+      lead: leads[2].id,
+      manager: admin.id,
+      type: 'call',
+      scheduledAt: new Date('2026-06-18'),
+      status: 'pending',
+      notes: 'Reminder for payment of remaining advance'
     }
   ])
 

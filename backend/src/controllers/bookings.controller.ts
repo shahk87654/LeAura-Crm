@@ -56,6 +56,9 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
         data.email ||= lead.email
       }
     }
+    // Generate unique booking reference
+    const { generateBookingRef } = await import('../utils/generateRef.js')
+    data.bookingRef = await generateBookingRef()
     const booking = await Booking.create(data)
     res.status(201).json({ success: true, data: booking })
   } catch (error) {

@@ -30,8 +30,12 @@ export async function getCalendarEvents(req: Request, res: Response, next: NextF
         color: booking.bookingStatus === 'confirmed' ? '#166534' : '#6B7280',
         extendedProps: {
           type: 'booking',
+          bookingId: booking.id,
+          clientName: booking.clientName,
           bookingStatus: booking.bookingStatus,
           venueArea: booking.venueArea,
+          location: booking.venueArea,
+          notes: booking.specialRequirements,
           manager: booking.assignedManager?.name
         }
       })),
@@ -43,8 +47,11 @@ export async function getCalendarEvents(req: Request, res: Response, next: NextF
         color: '#0f172a',
         extendedProps: {
           type: 'followup',
+          followUpId: followUp.id,
+          leadName: followUp.lead?.fullName,
           status: followUp.status,
-          manager: user?.id
+          manager: user?.id,
+          notes: followUp.notes
         }
       }))
     ]

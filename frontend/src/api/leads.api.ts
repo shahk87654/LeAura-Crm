@@ -34,7 +34,8 @@ export async function updateLead(id: string, payload: Partial<Lead>) {
   return response.data.data
 }
 
-export async function updateLeadStage(id: string, stage: string) {
-  const response = await api.patch<{ success: boolean; data: Lead }>(`/leads/${id}/stage`, { stage })
+export async function updateLeadStage(id: string, stageOrPayload: string | { stage: string; lostReason?: string }) {
+  const payload = typeof stageOrPayload === 'string' ? { stage: stageOrPayload } : stageOrPayload
+  const response = await api.patch<{ success: boolean; data: Lead }>(`/leads/${id}/stage`, payload)
   return response.data.data
 }

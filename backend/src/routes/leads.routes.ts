@@ -42,7 +42,8 @@ const updateSchema = z.object({
 const patchStageSchema = z.object({
   params: z.object({ id: z.string().min(1) }),
   body: z.object({
-    stage: z.enum(['new', 'contacted', 'interested', 'visit_scheduled', 'proposal_sent', 'negotiating', 'won', 'lost'])
+    stage: z.enum(['new', 'contacted', 'interested', 'visit_scheduled', 'proposal_sent', 'negotiating', 'won', 'lost']),
+    lostReason: z.string().optional()
   })
 })
 
